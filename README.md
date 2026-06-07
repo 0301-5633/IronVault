@@ -1,9 +1,12 @@
-# Project Name
+# IronVault
 
 
 
-A brief description of what your Python project does, its goals, and its main features.
+IronVault is a full stack password manager that enforces a zero-knowledge policy. Data is hashed on the client side,
+encrypted in transport, and then hashed again before storage. 
 
+Note that this project does not include certificates or a reverse proxy. These  would need to be set up in any production environment
+to ensure that TLS is in place.
 
 
 ## 🛠️ Prerequisites
