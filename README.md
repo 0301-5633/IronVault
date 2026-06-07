@@ -134,9 +134,10 @@ pip freeze > requirements.txt
 
 To run the main application file:
 
-```bash
+```Windows cmd
 
-python src/my\_package/main.py
+cd src
+fastapi dev
 
 ```
 
