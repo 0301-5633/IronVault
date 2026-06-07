@@ -1,4 +1,4 @@
-\# Project Name
+# Project Name
 
 
 
@@ -6,7 +6,7 @@ A brief description of what your Python project does, its goals, and its main fe
 
 
 
-\## 🛠️ Prerequisites
+## 🛠️ Prerequisites
 
 
 
@@ -18,7 +18,7 @@ Ensure you have the following software installed on your local machine:
 
 
 
-\## 🚀 Getting Started
+## 🚀 Getting Started
 
 
 
@@ -26,7 +26,7 @@ Follow these step-by-step instructions to set up your local development environm
 
 
 
-\### 1. Clone the Repository
+### 1. Clone the Repository
 
 Open your terminal and run:
 
@@ -40,7 +40,7 @@ cd your-repo-name
 
 
 
-\### 2. Create a Virtual Environment
+### 2. Create a Virtual Environment
 
 Isolate your dependencies by creating a local virtual environment:
 
@@ -52,7 +52,7 @@ python -m venv .venv
 
 
 
-\### 3. Activate the Virtual Environment
+### 3. Activate the Virtual Environment
 
 Activate the environment based on your operating system:
 
@@ -88,7 +88,7 @@ source .venv/bin/activate
 
 
 
-\### 4. Install Dependencies
+### 4. Install Dependencies
 
 Install all required project packages tracked in the `requirements.txt` file:
 
@@ -106,7 +106,7 @@ pip install -r requirements.txt
 
 
 
-\## 💻 Development Workflow
+## 💻 Development Workflow
 
 
 
@@ -114,7 +114,7 @@ To ensure smooth collaboration, please follow these guidelines when adding new f
 
 
 
-\### Adding New Packages
+### Adding New Packages
 
 If you need to install a new library (e.g., `requests`), run:
 
@@ -126,11 +126,11 @@ pip freeze > requirements.txt
 
 ```
 
-\*Always commit the updated `requirements.txt` file so other team members can pull the changes and update their environments.\*
+*Always commit the updated `requirements.txt` file so other team members can pull the changes and update their environments.\*
 
 
 
-\### Running the App
+### Running the App
 
 To run the main application file:
 
@@ -143,7 +143,7 @@ fastapi dev
 
 
 
-\### Deactivating the Environment
+### Deactivating the Environment
 
 When you are done working on the project, you can exit the virtual environment by running:
 
