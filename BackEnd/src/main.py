@@ -1,6 +1,9 @@
 from typing import Annotated
 from pydantic import BaseModel
 from fastapi import FastAPI, Path, Query
+from database import MySQLDatabase
+from mysql.connector import Error
+
 
 class ListRequest(BaseModel):
     userid: str # Should be replaced in the actual app with real user authentication, but this approximates the same thing (listing entries only belonging to one user)
@@ -57,6 +60,21 @@ fake_credential_db = {
 async def root():
     return {"message": "Hello World"}
 
+@app.get("/dbtest")
+async def dbtest():
+    try:
+        # Use your custom database context manager
+        with MySQLDatabase() as connection:
+            with connection.cursor() as cursor:
+                # Run your query
+                cursor.execute("SELECT VERSION();")
+                version = cursor.fetchone()
+                return{f"Hello World": "TEST", f"MySQL Version" : f"{version[0]}"}
+
+    except Error as e:
+        print(f"An error occurred in main: {e}")
+
+
 @app.get("/id/{entry_id}")
 async def read_credential(entry_id):
     if entry_id in fake_credential_db:
@@ -110,7 +128,3 @@ async def list_credentials(listrq: ListRequest):
         return{"items": results_list}
     else: return {"items": None}
 
-
-            
-
-     
