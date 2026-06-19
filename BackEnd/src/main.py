@@ -1,8 +1,18 @@
 from typing import Annotated
-
+from pydantic import BaseModel
 from fastapi import FastAPI, Path, Query
 
+class ListRequest(BaseModel):
+    userid: str # Should be replaced in the actual app with real user authentication, but this approximates the same thing (listing entries only belonging to one user)
 
+
+class CredentialItem(BaseModel):
+    userid: str
+    familymemid: str
+    category: str
+    website: str
+    username: str
+    password: str
 
 app = FastAPI()
 
@@ -65,3 +75,21 @@ async def read_credential(entry_id):
                 "password": cred_dict["password"] }
     else:
         return None 
+
+
+#@app.post("/newid/")
+
+@app.post("/listids/")
+async def list_credentials(listrq: ListRequest):
+    results_list = []
+    for keys in fake_credential_db.keys() :
+        current_creds = fake_credential_db[keys]
+        if listrq.userid == current_creds["userid"]:
+            results_list.append(keys)
+    if results_list:
+        return{"items": results_list}
+    else: return {"items": None}
+
+            
+
+     
