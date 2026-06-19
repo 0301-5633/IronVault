@@ -1,6 +1,8 @@
 from typing import Annotated
+from pathlib import Path as FilePath
 from pydantic import BaseModel
 from fastapi import FastAPI, Path, Query
+from fastapi.staticfiles import StaticFiles
 from database import MySQLDatabase
 from mysql.connector import Error
 
@@ -18,6 +20,11 @@ class CredentialItem(BaseModel):
     password: str
 
 app = FastAPI()
+
+#establishes path of frontend build files for mounting to root route
+current_dir = FilePath(__file__).parent
+frontend_dir = (current_dir / ".." / ".." / "FrontEnd" / "dist").resolve()
+
 
 fake_user_db = {"1": {"namefirst": "Example", "namelast": "Test"},
                  "2": {"namefirst":"John", "namelast": "Doe"}, "3":
@@ -56,9 +63,6 @@ fake_credential_db = {
 }
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 @app.get("/dbtest")
 async def dbtest():
@@ -128,3 +132,5 @@ async def list_credentials(listrq: ListRequest):
         return{"items": results_list}
     else: return {"items": None}
 
+#############Must be at bottom of file################
+app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
