@@ -34,7 +34,7 @@ fake_credential_db = {
         "username" : "example",
         "password" : "abc123"
     }, 
-        "12": {
+        "2": {
         "userid" : "2",
         "familymemid" : "3",
         "category" : "0",
@@ -42,7 +42,7 @@ fake_credential_db = {
         "username" : "john.doe",
         "password" : "p@ssw0rd"
     }, 
-            "34": {
+            "3": {
         "userid" : "3",
         "familymemid" : "1",
         "category" : "2",
@@ -77,7 +77,27 @@ async def read_credential(entry_id):
         return None 
 
 
-#@app.post("/newid/")
+@app.post("/newid/")
+async def new_credential(cred:CredentialItem):
+    if cred.userid in fake_user_db and cred.familymemid in fake_familymembers_db and cred.category in fake_category_db: # Basic validation 
+
+        new_cred = {}
+        new_cred["userid"] = cred.userid
+        new_cred["familymemid"] = cred.familymemid
+        new_cred["category"] = cred.category
+        new_cred["website"] = cred.website
+        new_cred["username"] = cred.username
+        new_cred["password"] = cred.password
+
+        #These two lines aren't necessary in an actual database with autoincrementing entries, but it's necessary for the fake DB
+        currentlast = list(fake_credential_db)[-1]
+        crednewid = str(int(currentlast) + 1)
+
+        new_cred_item = fake_credential_db[crednewid] = new_cred
+        return {"item_id": crednewid}
+    else: return {"item_id": None}
+    
+
 
 @app.post("/listids/")
 async def list_credentials(listrq: ListRequest):
@@ -89,6 +109,7 @@ async def list_credentials(listrq: ListRequest):
     if results_list:
         return{"items": results_list}
     else: return {"items": None}
+
 
             
 
