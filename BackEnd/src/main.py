@@ -1,6 +1,6 @@
 from typing import Annotated
 from pydantic import BaseModel
-from fastapi import FastAPI, Path, Query
+from fastapi import FastAPI, Path, Query, HTTPException
 
 class ListRequest(BaseModel):
     userid: str # Should be replaced in the actual app with real user authentication, but this approximates the same thing (listing entries only belonging to one user)
@@ -13,6 +13,10 @@ class CredentialItem(BaseModel):
     website: str
     username: str
     password: str
+
+class DeleteRequest(BaseModel):
+    userid: str # Should be replaced in the actual app with real user authentication, but this approximates the same thing (listing entries only belonging to one user)
+    entryid: str
 
 app = FastAPI()
 
@@ -74,12 +78,31 @@ async def read_credential(entry_id):
                 "username": cred_dict["username"],
                 "password": cred_dict["password"] }
     else:
-        return None 
+        raise HTTPException(status_code=400, detail="Entry not found")   
+
+@app.post("/id/{entry_id}")
+async def edit_credential(entry_id, cred_details:CredentialItem):
+    if entry_id in fake_credential_db:
+        cred_dict = fake_credential_db[entry_id]
+        if cred_dict["userid"] == cred_details.userid and cred_details.userid != "0":
+            if cred_details.familymemid in fake_familymembers_db and cred_details.category in fake_category_db: # Basic validation
+                
+                cred_dict["familymemid"] = cred_details.familymemid
+                cred_dict["category"] = cred_details.category
+                cred_dict["website"] = cred_details.website
+                cred_dict["username"] = cred_details.username
+                cred_dict["password"] = cred_details.password
+                return {"item_id": entry_id}
+    raise HTTPException(status_code=400, detail="Entry not found")        
+    
+ 
+                
+
 
 
 @app.post("/newid/")
 async def new_credential(cred:CredentialItem):
-    if cred.userid in fake_user_db and cred.familymemid in fake_familymembers_db and cred.category in fake_category_db: # Basic validation 
+    if cred.userid in fake_user_db and cred.userid != "0" and cred.familymemid in fake_familymembers_db and cred.category in fake_category_db: # Basic validation 
 
         new_cred = {}
         new_cred["userid"] = cred.userid
@@ -95,8 +118,21 @@ async def new_credential(cred:CredentialItem):
 
         new_cred_item = fake_credential_db[crednewid] = new_cred
         return {"item_id": crednewid}
-    else: return {"item_id": None}
+    else: raise HTTPException(status_code=400, detail="Invalid values")   
     
+
+
+@app.post("/deleteid")
+async def delete_credential(delrq: DeleteRequest):
+    deleted_cred = {"userid": "0"}
+    entry_id = delrq.entryid
+    if entry_id in fake_credential_db:
+        cred_dict = fake_credential_db[entry_id]
+        if cred_dict["user_id"] == entry_id and entry_id != "0":
+            fake_credential_db[entry_id] = deleted_cred
+            return {"item_id": entry_id}
+    raise HTTPException(status_code=400, detail="Entry not found") 
+
 
 
 @app.post("/listids/")
