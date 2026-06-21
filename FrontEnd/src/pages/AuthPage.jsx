@@ -18,20 +18,20 @@ export default function AuthPage()
 // but can be replaced with actual authentication logic later on when backend integration is done
 
     const onSubmit = async (d) => {
-        alert(JSON.stringify(d));
+        const formData = new URLSearchParams();
+        formData.append('username', d.email);
+        formData.append('password', d.password);
         try {
-                    const result = await apiRequest('/token', 'POST', JSON.stringify({
-                            username: d.email,
-                            password: d.password
-                        })
-                    );
-
-                    if (result.status === 200)
-                    {
-                        setLogin(true);
-                        navigate('/dashboard');
-                    }
-                }
+            const response = await fetch('/token', {
+                method: 'POST',
+                credentials: 'include', // Keep this root parameter if required
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData // Pass the formatted URLSearchParams directly
+            });
+            if(response.status === 200) navigate('/dashboard');
+        }
         catch (error) {
             console.error(error);
         }

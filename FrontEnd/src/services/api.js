@@ -21,10 +21,13 @@ export async function apiRequest(
             credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
-            body
+            'body': body
         }
     );
+
+
 
     return response.json();
 }

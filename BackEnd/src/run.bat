@@ -1,1 +1,1 @@
-uvicorn main:app --reload --ssl-keyfile=key.pem --ssl-certfile=cert.pem
+uvicorn main:app --reload --ssl-keyfile=key.pem --ssl-certfile=cert.pem --log-level debug
