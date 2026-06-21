@@ -11,22 +11,22 @@ import './App.css'
 
 function App() {
   return (
-    <div className="App">
-  <div style={{ display: "flex" }}>
-    <Navbar />
-    <div style={{ flex: 1 }}>
-      <Topbar />
-      <Routes> 
-        <Route path='/' element={<DashboardPage />} />
-        <Route path='/dashboard' element={<DashboardPage />} />
-        <Route path='/auth' element={<AuthPage />} />
-        <Route path='/categories' element={<CategoriesPage />} />
-        <Route path='/entries' element={<EntriesPage />} />
-        <Route path='/members' element={<MembersPage />} />
-      </Routes>
+  <div className="App">
+    <div style={{ display: "flex" }}>
+      <Navbar />
+      <div style={{ flex: 1 }}>
+        <Topbar />
+        <Routes> 
+          <Route path='/' element={<DashboardPage />} />
+          <Route path='/dashboard' element={<DashboardPage />} />
+          <Route path='/auth' element={<AuthPage />} />
+          <Route path='/categories' element={<CategoriesPage />} />
+          <Route path='/entries' element={<EntriesPage />} />
+          <Route path='/members' element={<MembersPage />} />
+        </Routes>
+      </div>
     </div>
   </div>
-</div>
   )
 }
 

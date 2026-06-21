@@ -64,7 +64,7 @@ fake_credential_db = {
 
 
 
-@app.get("/dbtest")
+@app.get("/api/dbtest")
 async def dbtest():
     try:
         # Use your custom database context manager

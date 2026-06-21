@@ -8,7 +8,7 @@ class MySQLDatabase:
         self.config = {
             "host": "localhost", #TODO:
             "user": "root", #TODO: Needs correct user
-            "password": "PUT_PASSWORD_HERE", #TODO: HANDLE WITH ENVIRONMENT VARIABLES
+            "password": "12345678", #TODO: HANDLE WITH ENVIRONMENT VARIABLES
             "database": "ironVault"
         }
         self.connection = None

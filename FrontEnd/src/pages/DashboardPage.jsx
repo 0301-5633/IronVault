@@ -1,3 +1,12 @@
+import Buttontest from "../components/ButtonTest";
+
 export default function DashboardPage(){
-    return <div>Dashboard Page aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+    return (
+        <div>
+            <Buttontest />
+            <p>
+                Lorem Ipsum
+            </p>
+        </div>
+    )
 }
