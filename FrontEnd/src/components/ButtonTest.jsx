@@ -6,7 +6,7 @@ function ButtonTest() {
 
     async function handleClick() {
         try {
-            const result = await apiRequest("/api/dbtest");
+            const result = await apiRequest("/api/all");
 
             setData(result);
         }
