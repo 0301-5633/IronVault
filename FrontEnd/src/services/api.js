@@ -11,14 +11,18 @@
 
 export async function apiRequest(
     endpoint,
-    options = {}
+    method,
+    body
 ) {
 
-    const response = await fetch(
-        `${endpoint}`,
+    const response = await fetch(`${endpoint}`,
         {
+            method,
             credentials: "include",
-            ...options
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body
         }
     );
 
