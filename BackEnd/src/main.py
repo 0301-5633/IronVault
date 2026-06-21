@@ -1,5 +1,5 @@
 
-
+import logging
 import jwt
 from typing import Annotated
 from datetime import datetime, timedelta, timezone
@@ -8,10 +8,13 @@ from pydantic import BaseModel
 from fastapi import Depends, FastAPI, Path, Query, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 from database import MySQLDatabase
 from mysql.connector import Error
+
+
 
 
 SECRET_KEY = "4d8fc961715acce78e0208d1ceb1d18ac0a29b2eac8b2ac6b5ded3d3fbf1a80d"
@@ -48,7 +51,18 @@ class UserInDB(User):
     password: str
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://localhost:5173",
+        "https://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 password_hash = PasswordHash.recommended()
@@ -118,8 +132,10 @@ frontend_dir = (current_dir / ".." / ".." / "FrontEnd" / "dist").resolve()
 
 
 fake_user_db = {"example": {"namefirst": "Example", "namelast": "Test", "password":"$argon2i$v=19$m=4096,t=3,p=1$c29tZXNhbHQ$tomTOMNBNVvpXnQ+/ske78hKBlfnJX+WbWME6ehXC3k","username":"example","userid":"1"},
-                 "johndoe": {"namefirst":"John", "namelast": "Doe", "password":"$argon2i$v=19$m=4096,t=3,p=1$c29tZXNhbHQ$iWh06vD8Fy27wf9npn6FXWiCX4K6pW6Ue1Bnzz07Z8A","username":"johndoe","userid":"2"},
-                   "ironvault":{"namefirst": "IronVault", "namelast": "Social", "password":"$argon2i$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$21Dohi2iRODFcpsNqh0He3L4Tu13xxAkN/bf3L3mDtQ","username":"ironvault","userid":"3"}}
+                 "johndoe@example.com": {"namefirst":"John", "namelast": "Doe", "email": "john@example.com", "password":"$argon2id$v=19$m=65536,t=3,p=4$wagCPXjifgvUFBzq4hqe3w$CYaIb8sB+wtD+Vu/P4uod1+Qof8h+1g7bbDlBID48Rc","username":"johndoe@example.com","userid":"2"},
+                   "ironvault":{"namefirst": "IronVault", "namelast": "Social", "password":"$argon2i$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$21Dohi2iRODFcpsNqh0He3L4Tu13xxAkN/bf3L3mDtQ","username":"ironvault","userid":"3"}
+                }
+# Had to change username to email for front end purposes tested against johndoe@example.com
 
 fake_user_id_db = {"1":"example","2":"johndoe","3":"ironvault"}
 
@@ -155,10 +171,11 @@ fake_credential_db = {
     }
 }
 
-@app.post("/token")
+@app.post("/api/token")
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
+    #print(f"Form Data: {form_data.password} {form_data.username}", flush=True) # used to test incoming data
     user = authenticate_user(fake_user_db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -171,20 +188,6 @@ async def login_for_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
-
-@app.get("/dbtest")
-async def dbtest():
-    try:
-        # Use your custom database context manager
-        with MySQLDatabase() as connection:
-            with connection.cursor() as cursor:
-                # Run your query
-                cursor.execute("SELECT VERSION();")
-                version = cursor.fetchone()
-                return{f"Hello World": "TEST", f"MySQL Version" : f"{version[0]}"}
-
-    except Error as e:
-        print(f"An error occurred in main: {e}")
 
 
 @app.get("/id/{entry_id}")
@@ -223,11 +226,6 @@ async def edit_credential(current_user: Annotated[User, Depends(get_current_user
                 return {"item_id": entry_id}
         else: raise HTTPException(status_code=403, detail="Access denied")
     raise HTTPException(status_code=404, detail="Entry not found")        
-    
- 
-                
-
-
 
 @app.post("/newid/")
 async def new_credential(current_user: Annotated[User, Depends(get_current_user)], cred:CredentialItem):
@@ -248,7 +246,6 @@ async def new_credential(current_user: Annotated[User, Depends(get_current_user)
         new_cred_item = fake_credential_db[crednewid] = new_cred
         return {"item_id": crednewid}
     else: raise HTTPException(status_code=400, detail="Invalid values")   
-    
 
 
 @app.post("/deleteid")
@@ -263,8 +260,6 @@ async def delete_credential(current_user: Annotated[User, Depends(get_current_us
         else: raise HTTPException(status_code=403, detail="Access denied")
     raise HTTPException(status_code=404, detail="Entry not found") 
 
-
-
 @app.post("/listids/")
 async def list_credentials(current_user: Annotated[User, Depends(get_current_user)]):
     results_list = []
@@ -275,6 +270,35 @@ async def list_credentials(current_user: Annotated[User, Depends(get_current_use
     if results_list:
         return{"items": results_list}
     else: return {"items": None}
+
+# Test connection to database and json sending
+@app.get("/api/all")
+async def dbtest():
+    try:
+        # Use your custom database context manager
+        with MySQLDatabase() as connection:
+            with connection.cursor() as cursor:
+                # Run your query
+                cursor.execute("SELECT * FROM userstbl")
+                return cursor.fetchall()
+    except Error as e:
+        print(f"An error occurred in main: {e}")
+
+
+# Test connection to database
+@app.get("/api/dbtest")
+async def dbtest():
+    try:
+        # Use your custom database context manager
+        with MySQLDatabase() as connection:
+            with connection.cursor() as cursor:
+                # Run your query
+                cursor.execute("SELECT VERSION();")
+                version = cursor.fetchone()
+                return{f"Hello World": "TEST", f"MySQL Version" : f"{version[0]}"}
+
+    except Error as e:
+        print(f"An error occurred in main: {e}")
 
 #############Must be at bottom of file################
 app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")

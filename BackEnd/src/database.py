@@ -1,15 +1,23 @@
+import os
+from dotenv import load_dotenv
 import mysql.connector
 from mysql.connector import Error
+
+# make .env file with contents
+# DB_HOST=host
+# DB_USER=user
+# DB_PASSWORD=password
+# DB_NAME=dbname
 
 class MySQLDatabase:
     def __init__(self):
         # Database configuration details
-        # Temp for testing. See todos
+        load_dotenv()
         self.config = {
-            "host": "localhost", #TODO:
-            "user": "root", #TODO: Needs correct user
-            "password": "PUT_PASSWORD_HERE", #TODO: HANDLE WITH ENVIRONMENT VARIABLES
-            "database": "ironVault"
+            "host": os.getenv("DB_HOST"),
+            "user": os.getenv("DB_USER"),
+            "password": os.getenv("DB_PASSWORD"),
+            "database": os.getenv("DB_NAME")
         }
         self.connection = None
 

@@ -1,10 +1,14 @@
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { apiRequest } from "../services/api";
 
 export default function AuthPage()  
 {
+    const navigate = useNavigate();
+
 // State to toggle between login and signup modes
-    const [mode, setMode] = useState("signup");
+    const [mode, setMode] = useState("Login");
 
 // Using react-hook-form for form handling and validation 
 // it provides a simple way to manage form state and validation rules.
@@ -12,9 +16,31 @@ export default function AuthPage()
 
 // Function to handle form submission currently just shows an alert to check that the submission works
 // but can be replaced with actual authentication logic later on when backend integration is done
-    function onSubmit()
-    {
-        alert("Form submitted");
+
+    const onSubmit = async (d) => {
+        const formData = new URLSearchParams();
+        formData.append('username', d.email);
+        formData.append('password', d.password);
+        try {
+            const response = await fetch('/api/token', {
+                method: 'POST',
+                credentials: 'include', // Keep this root parameter if required
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData // Pass the formatted URLSearchParams directly
+            });
+            
+
+            const data = await response.json();
+
+            sessionStorage.setItem('access_token', data.access_token);
+
+            if(response.status === 200) navigate('/dashboard');
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
     return (
         <div className='page'>
