@@ -52,3 +52,5 @@ dist-ssr
 *.sln
 *.sw?
 /FrontEnd/.vite
+BackEnd/key.pem
+BackEnd/src/key.pem
