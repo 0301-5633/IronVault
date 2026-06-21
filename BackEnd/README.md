@@ -1,7 +1,5 @@
 # IronVault
 
-
-
 IronVault is a full stack password manager that enforces a zero-knowledge policy. Data is hashed on the client side,
 encrypted in transport, and then hashed again before storage. 
 
@@ -11,22 +9,16 @@ to ensure that TLS is in place.
 
 ## 🛠️ Prerequisites
 
-
-
 Ensure you have the following software installed on your local machine:
 
-\* \*\*Python 3.10+\*\* (or your preferred version)
+\*\*Python 3.10+\*\* (or your preferred version)
 
-\* \*\*Git\*\*
-
+\*\*Git\*\*
 
 
 ## 🚀 Getting Started
 
-
-
 Follow these step-by-step instructions to set up your local development environment.
-
 
 
 ### 1. Clone the Repository
@@ -42,7 +34,6 @@ cd your-repo-name
 ```
 
 
-
 ### 2. Create a Virtual Environment
 
 Isolate your dependencies by creating a local virtual environment:
@@ -54,14 +45,11 @@ python -m venv .venv
 ```
 
 
-
 ### 3. Activate the Virtual Environment
 
 Activate the environment based on your operating system:
 
-
-
-\* \*\*macOS / Linux:\*\*
+\*\*macOS / Linux:\*\*
 
 ```bash
 
@@ -69,7 +57,7 @@ source .venv/bin/activate
 
 ```
 
-\* \*\*Windows (Command Prompt):\*\*
+\*\*Windows (Command Prompt):\*\*
 
 ```cmd
 
@@ -77,7 +65,7 @@ source .venv/bin/activate
 
 ```
 
-\* \*\*Windows (PowerShell):\*\*
+\*\*Windows (PowerShell):\*\*
 
 ```powershell
 
@@ -85,10 +73,7 @@ source .venv/bin/activate
 
 ```
 
-
-
 \*Visual cue: Your terminal prompt should now show `(.venv)` at the beginning of the line.\*
-
 
 
 ### 4. Install Dependencies
@@ -104,17 +89,9 @@ pip install -r requirements.txt
 ```
 
 
-
-\---
-
-
-
 ## 💻 Development Workflow
 
-
-
 To ensure smooth collaboration, please follow these guidelines when adding new features or packages.
-
 
 
 ### Adding New Packages
@@ -129,13 +106,13 @@ pip freeze > requirements.txt
 
 ```
 
-*Always commit the updated `requirements.txt` file so other team members can pull the changes and update their environments.\*
-
+\*Always commit the updated `requirements.txt` file so other team members can pull the changes and update their environments.\*
 
 
 ### Running the App
 
 To run the main application file:
+See "Running with HTTPS" for more information
 
 ```Windows cmd
 
@@ -144,6 +121,27 @@ fastapi dev
 
 ```
 
+
+### Running with HTTPS
+
+cert.pem and key.pem required
+can generate them with generate_cert.sh
+ENSURE THAT "key.pem" IS IN .gitignore *DO NOT SHARE PRIVATE KEY
+
+run.sh
+```bash
+uvicorn main:app \
+    --reload \
+    --ssl-keyfile=key.pem \
+    --ssl-certfile=cert.pem
+```
+run.bat
+```Windows cmd
+uvicorn main:app --reload `
+    --ssl-keyfile=key.pem`
+    --ssl-certfile=cert.pem`
+    --log-level debug
+```
 
 
 ### Deactivating the Environment

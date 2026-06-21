@@ -22,7 +22,7 @@ export default function AuthPage()
         formData.append('username', d.email);
         formData.append('password', d.password);
         try {
-            const response = await fetch('/token', {
+            const response = await fetch('/api/token', {
                 method: 'POST',
                 credentials: 'include', // Keep this root parameter if required
                 headers: {
@@ -30,6 +30,16 @@ export default function AuthPage()
                 },
                 body: formData // Pass the formatted URLSearchParams directly
             });
+            
+            const maxAge = 15 * 60 * 1000; // 15 min
+            const expiryTime = Date.now() + maxAge;
+            const data = await response.json();
+            const sessionPayload = {
+                token: data.access_token,
+                expiresAt: expiryTime
+            };
+            sessionStorage.setItem('access_token', sessionPayload);
+
             if(response.status === 200) navigate('/dashboard');
         }
         catch (error) {

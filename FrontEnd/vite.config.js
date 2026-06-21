@@ -7,7 +7,7 @@ export default defineConfig({
   base: './', // 👈 Adds relative pathing for built assets
   server: {
     proxy: {
-      '/token': {
+      '/api': { // All calls through api get routed to the proxy for the back end in dev
         target: 'https://127.0.0.1:8000',
         changeOrigin: true,
         secure: false,

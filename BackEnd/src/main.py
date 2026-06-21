@@ -1,6 +1,5 @@
 
 import logging
-import uvicorn
 import jwt
 from typing import Annotated
 from datetime import datetime, timedelta, timezone
@@ -15,7 +14,7 @@ from pwdlib import PasswordHash
 from database import MySQLDatabase
 from mysql.connector import Error
 
-logger = logging.getLogger("uvicorn")
+
 
 
 SECRET_KEY = "4d8fc961715acce78e0208d1ceb1d18ac0a29b2eac8b2ac6b5ded3d3fbf1a80d"
@@ -134,7 +133,9 @@ frontend_dir = (current_dir / ".." / ".." / "FrontEnd" / "dist").resolve()
 
 fake_user_db = {"example": {"namefirst": "Example", "namelast": "Test", "password":"$argon2i$v=19$m=4096,t=3,p=1$c29tZXNhbHQ$tomTOMNBNVvpXnQ+/ske78hKBlfnJX+WbWME6ehXC3k","username":"example","userid":"1"},
                  "johndoe@example.com": {"namefirst":"John", "namelast": "Doe", "email": "john@example.com", "password":"$argon2id$v=19$m=65536,t=3,p=4$wagCPXjifgvUFBzq4hqe3w$CYaIb8sB+wtD+Vu/P4uod1+Qof8h+1g7bbDlBID48Rc","username":"johndoe@example.com","userid":"2"},
-                   "ironvault":{"namefirst": "IronVault", "namelast": "Social", "password":"$argon2i$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$21Dohi2iRODFcpsNqh0He3L4Tu13xxAkN/bf3L3mDtQ","username":"ironvault","userid":"3"}}
+                   "ironvault":{"namefirst": "IronVault", "namelast": "Social", "password":"$argon2i$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$21Dohi2iRODFcpsNqh0He3L4Tu13xxAkN/bf3L3mDtQ","username":"ironvault","userid":"3"}
+                }
+# Had to change username to email for front end purposes tested against johndoe@example.com
 
 fake_user_id_db = {"1":"example","2":"johndoe","3":"ironvault"}
 
@@ -170,11 +171,11 @@ fake_credential_db = {
     }
 }
 
-@app.post("/token")
+@app.post("/api/token")
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
-    print(f"Form Data: {form_data.password} {form_data.username}", flush=True)
+    #print(f"Form Data: {form_data.password} {form_data.username}", flush=True) # used to test incoming data
     user = authenticate_user(fake_user_db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(

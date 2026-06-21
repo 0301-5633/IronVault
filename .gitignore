@@ -54,3 +54,6 @@ dist-ssr
 /FrontEnd/.vite
 BackEnd/key.pem
 BackEnd/src/key.pem
+
+# other files
+Notes.md
