@@ -51,3 +51,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+/FrontEnd/.vite
+BackEnd/key.pem
+BackEnd/src/key.pem
+
+# other files
+Notes.md
