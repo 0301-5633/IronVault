@@ -3,3 +3,15 @@ Python environment - https://share.google/aimode/cXFet6FatKHHIiVfw
 Database Readme - https://chatgpt.com/share/6a2ea6fd-b4e0-83ea-aaf4-7230ad3a6b1a
 
 JS helper function - https://chatgpt.com/share/6a2ec362-c484-83ea-a6d5-67924bf6027d
+
+OAuth vs JWT in Projects - https://chatgpt.com/share/6a38045e-b92c-83ea-87aa-e056b83bb3f0
+
+More OAuth and Fast API - https://chatgpt.com/share/6a380537-85e0-83ea-bf33-e58b0bf39919
+
+Login setup and understanding FastAPI sample code - https://chatgpt.com/share/6a380482-c904-83ea-b889-7722069bdcd0
+
+React stuff - https://chatgpt.com/share/6a380568-b66c-83ea-87f7-9b2c8eed0c4e
+
+jwt token in FastAPI response obj and HTTPOnly cookie - https://share.google/aimode/KqSPEAZHOwJACe2IZ
+
+CORS for react for dev environment to see backend - https://share.google/aimode/KqSPEAZHOwJACe2IZ

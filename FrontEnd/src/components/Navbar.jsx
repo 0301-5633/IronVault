@@ -17,8 +17,6 @@ export default function Navbar()
         <div className="sidebar-nav">
             <NavLink to="/dashboard" className="sidebar-link">Dashboard</NavLink>
             <NavLink to="/entries" className="sidebar-link">Entries</NavLink>
-            <NavLink to="/categories" className="sidebar-link">Categories</NavLink>
-            <NavLink to="/members" className="sidebar-link">Members</NavLink>
         </div>
     </nav>
     );

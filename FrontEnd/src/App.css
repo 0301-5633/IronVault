@@ -149,6 +149,22 @@ body{
   background-color: #5a22b5;
 }
 
+.btn-logout {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-logout:hover {
+    background-color: #b91c1c;
+}
+
 .page {
   flex: 1;
   padding: 2rem 0;
@@ -227,4 +243,129 @@ body{
 
 .auth-link:hover {
   text-decoration: underline;
+}
+.dashboard {
+	padding: 24px;
+	background-color: #f0f0f0;
+	min-height: 100vh;
+}
+
+.dashboard-controls {
+	margin-bottom: 24px;
+}
+
+.search-wrapper {
+	display: flex;
+	align-items: center;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 10px 16px;
+	gap: 8px;
+	max-width: 400px;
+}
+
+.search-icon {
+	font-size: 16px;
+	color: #888;
+}
+
+.search-input {
+	border: none;
+	outline: none;
+	font-size: 14px;
+	width: 100%;
+	background: transparent;
+}
+
+.entries-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 16px;
+}
+
+.entry-card {
+	background-color: white;
+	border-radius: 12px;
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	transition: box-shadow 0.2s ease;
+}
+
+.entry-card:hover {
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Header */
+.entry-card-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.entry-logo {
+	width: 28px;
+	height: 28px;
+	object-fit: contain;
+}
+
+.entry-website {
+	font-weight: 600;
+	font-size: 16px;
+	color: #2b2b2b;
+}
+
+.entry-card-body {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.entry-username {
+	font-size: 13px;
+	color: #666;
+	margin: 0;
+}
+
+.entry-category {
+	font-size: 12px;
+	font-weight: 600;
+	padding: 2px 10px;
+	border-radius: 20px;
+	width: fit-content;
+}
+
+.category-personal { background-color: #dbeafe; color: #2563eb; }
+.category-entertainment { background-color: #dcfce7; color: #16a34a; }
+.category-shopping { background-color: #fef9c3; color: #ca8a04; }
+.category-work { background-color: #fce7f3; color: #9d174d; }
+
+.entry-card-footer {
+	border-top: 1px solid #f0f0f0;
+	padding-top: 10px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.entry-actions button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 4px;
+	transition: transform 0.1s ease;
+}
+
+.entry-actions button:hover {
+	transform: scale(1.2);
+}
+
+.empty-state {
+	text-align: center;
+	padding: 60px;
+	color: #888;
+	font-size: 16px;
 }

@@ -1,32 +1,44 @@
 
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
+// import LandingPage from './pages/LandingPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import AuthPage from './pages/AuthPage.jsx'
-import CategoriesPage from './pages/CategoriesPage.jsx'
 import EntriesPage from './pages/EntriesPage.jsx'
-import MembersPage from './pages/MembersPage.jsx'
 import Navbar from './components/Navbar.jsx' 
 import Topbar from './components/topbar.jsx'
+import AuthProvider from './context/AuthContext.jsx'
 import './App.css'
 
 function App() {
+  const location = useLocation();
+
+  const hideTopNavbar = ['/', '/auth'].includes(location.pathname);
+  
+  // const [login, setLogin] = useState(false);
+
   return (
-    <div className="App">
-  <div style={{ display: "flex" }}>
-    <Navbar />
-    <div style={{ flex: 1 }}>
-      <Topbar />
-      <Routes> 
-        <Route path='/' element={<DashboardPage />} />
-        <Route path='/dashboard' element={<DashboardPage />} />
-        <Route path='/auth' element={<AuthPage />} />
-        <Route path='/categories' element={<CategoriesPage />} />
-        <Route path='/entries' element={<EntriesPage />} />
-        <Route path='/members' element={<MembersPage />} />
-      </Routes>
-    </div>
-  </div>
-</div>
+  <AuthProvider>
+      <div className="App">
+        {hideTopNavbar ? 
+        (
+          <Routes>
+						<Route path='/' element={<AuthPage />} />
+						<Route path='/auth' element={<AuthPage />} />
+					</Routes>
+         ):(
+        <div style={{ display: "flex" }}>
+          <Navbar />
+          <div style={{ flex: 1 }}>
+            <Topbar />
+            <Routes> 
+              <Route path='/dashboard' element={<DashboardPage />} />
+              <Route path='/entries' element={<EntriesPage />} />
+            </Routes>
+          </div>
+        </div>
+        )}
+      </div>
+  </AuthProvider>
   )
 }
 

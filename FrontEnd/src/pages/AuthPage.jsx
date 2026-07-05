@@ -1,10 +1,17 @@
-import {useState} from 'react';
+import {useContext,useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {AuthContext} from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+// import { apiRequest } from "../services/api";
 
 export default function AuthPage()  
 {
+    const navigate = useNavigate();
+    const [error, setError] = useState(null);
+
 // State to toggle between login and signup modes
-    const [mode, setMode] = useState("signup");
+    const [mode, setMode] = useState("login");
+    const {signUp, login } = useContext(AuthContext);
 
 // Using react-hook-form for form handling and validation 
 // it provides a simple way to manage form state and validation rules.
@@ -12,17 +19,57 @@ export default function AuthPage()
 
 // Function to handle form submission currently just shows an alert to check that the submission works
 // but can be replaced with actual authentication logic later on when backend integration is done
-    function onSubmit()
-    {
-        alert("Form submitted");
+
+    // const onSubmit = async (d) => {
+    //     const formData = new URLSearchParams();
+    //     formData.append('username', d.email);
+    //     formData.append('password', d.password);
+    //     try {
+    //         const response = await fetch('/api/token', {
+    //             method: 'POST',
+    //             credentials: 'include', // Keep this root parameter if required
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded'
+    //             },
+    //             body: formData // Pass the formatted URLSearchParams directly
+    //         });
+            
+
+    //         const data = await response.json();
+
+    //         sessionStorage.setItem('access_token', data.access_token);
+
+    //         if(response.status === 200) navigate('/dashboard');
+    //     }
+    //     catch (error) {
+    //         console.error(error);
+    //     }    
+    // }
+
+    function onSubmit(data) {
+        setError(null);
+        let result;
+        if (mode === "signup") {
+        result = signUp(data.email, data.password);
+        } else {
+        result = login(data.email, data.password);
+        }
+
+        if (result.success) {
+        navigate("/dashboard");
+        } else {
+        setError(result.error);
+        }
     }
+
     return (
         <div className='page'>
             <div className='auth-container'>
                 <h1 className='auth-title'>
-                    {mode === "Login" ? "Login" : "Sign Up"} {/* Displaying the title based on the current mode (Login or Sign Up) */}
+                    {mode === "login" ? "Login" : "Sign Up"} {/* Displaying the title based on the current mode (Login or Sign Up) */}
                 </h1>
                 <form className='auth-form' onSubmit={handleSubmit(onSubmit)}>
+                {error && <div className="error-message">{error}</div>}
                     <div className='form-group'>
                         <label className='form-label' htmlFor='email'>Email</label>
                         <input className='form-input' type='email' placeholder='Enter your email' id='email' 
@@ -39,20 +86,20 @@ export default function AuthPage()
                     </div>
 
                     <button className='btn-login' type='submit'>
-                        {mode === "Login" ? "Login" : "Sign Up"} {/* Displaying the button text based on the current mode (Login or Sign Up) */}
+                        {mode === "login" ? "Login" : "Sign Up"} {/* Displaying the button text based on the current mode (Login or Sign Up) */}
                     </button>
                 </form>
                 <div className='auth-switch'>
                     {/* Providing a link to switch between login and signup modes. The text and the onClick handler change based on the current mode. */}
-                    {mode === "Login" ? (
+                    {mode === "login" ? (
                         <p>
-                             Don't have an account? <span className='auth-link' onClick={() => setMode("Signup")}>  
+                             Don't have an account? <span className='auth-link' onClick={() => setMode("signup")}>  
                                 SignUp
                             </span>
                         </p>
                     ) : (
                         <p>
-                            Already have an account? <span className='auth-link' onClick={() => setMode("Login")}>
+                            Already have an account? <span className='auth-link' onClick={() => setMode("login")}>
                                 login
                             </span>
                         </p>
