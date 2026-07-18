@@ -11,7 +11,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
-from database import MySQLDatabase
+# from database import MySQLDatabase
 from mysql.connector import Error
 
 
@@ -177,6 +177,23 @@ async def login_for_access_token(
 ) -> Token:
     #print(f"Form Data: {form_data.password} {form_data.username}", flush=True) # used to test incoming data
     user = authenticate_user(fake_user_db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return Token(access_token=access_token, token_type="bearer")
+
+# For API testing purposes only, do not use otherwise
+@app.post("/testtoken")
+async def login_for_access_token_test():
+    #print(f"Form Data: {form_data.password} {form_data.username}", flush=True) # used to test incoming data
+    user = authenticate_user(fake_user_db,"johndoe@example.com","secret")
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
