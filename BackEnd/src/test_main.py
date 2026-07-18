@@ -23,7 +23,7 @@ def test_id_creation_access():
     created_item = creation_request.json()["item_id"]
     item_access = client.get("/id/" + created_item)
     assert item_access.status_code == 200
-    
+
     assert item_access.json()["category"] == "Example"
     assert item_access.json()["mem_id"] == "Example"
     assert item_access.json()["website"] == "www.example.net"
@@ -37,5 +37,6 @@ def test_id_creation_access():
 def test_list_ids():
     response = client.post("/listids/")
     response_items = response.json()["items"]
+    print(response_items)
     assert "2" in response_items
     assert "4" in response_items
