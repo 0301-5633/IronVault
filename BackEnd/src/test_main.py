@@ -7,7 +7,7 @@ client = TestClient(app)
 
 @pytest.fixture(autouse=True)
 def basis_client():
-    token_request = client.post("/testtoken")
+    token_request = client.post("/testtoken") # Test Token function automatically authenticates using the johndoe@example.com credential pair, simplifying the test code
     valid_token = token_request.json()
     auth_header_value = (f"{valid_token['token_type']} {valid_token['access_token']}")
     client.headers = {"Authorization":auth_header_value}
