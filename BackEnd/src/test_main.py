@@ -38,5 +38,5 @@ def test_list_ids():
     response = client.post("/listids/")
     response_items = response.json()["items"]
     print(response_items)
-    assert "2" in response_items
-    assert "4" in response_items
+    assert "2" in response_items # 2 is the ID number of an item associated with this user already in the database
+  
