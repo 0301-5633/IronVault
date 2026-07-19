@@ -295,6 +295,7 @@ async def dbtest():
                 # Run your query
                 cursor.execute("SELECT VERSION();")
                 version = cursor.fetchone()
+
                 return{f"Hello World": "TEST", f"MySQL Version" : f"{version[0]}"}
 
     except Error as e:
